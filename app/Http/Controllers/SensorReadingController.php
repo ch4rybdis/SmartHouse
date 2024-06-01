@@ -44,13 +44,23 @@ class SensorReadingController extends Controller
 
     // Retrieve a specific sensor reading by id
     public function show($id)
-    {
-        $reading = SensorReading::find($id);
-        if (!$reading) {
-            return response()->json(['message' => 'Sensor reading not found'], 404);
-        }
-        return response()->json($reading);
+{
+    $reading = SensorReading::find($id);
+    if (!$reading) {
+        return response()->json(['message' => 'Sensor reading not found'], 404);
     }
+
+    $formattedReading = [
+        'id' => $reading->id,
+        'sensor_type' => $reading->sensor_type,
+        'value' => $reading->value,
+        'created_at' => $reading->created_at->toIso8601String(),
+        'updated_at' => $reading->updated_at->toIso8601String(),
+    ];
+
+    return response()->json($formattedReading);
+}
+
 
     // Update a specific sensor reading by id
     public function update(Request $request, $id)
