@@ -10,7 +10,16 @@ class SensorReadingController extends Controller
     // Retrieve all sensor readings
     public function index()
     {
-        $readings = SensorReading::all();
+        $readings = SensorReading::all()->map(function ($reading) {
+            return [
+                'id' => $reading->id,
+                'sensor_type' => $reading->sensor_type,
+                'value' => $reading->value,
+                'created_at' => $reading->created_at->toIso8601String(),
+                'updated_at' => $reading->updated_at->toIso8601String(),
+            ];
+        });
+
         return response()->json($readings);
     }
 
