@@ -62,6 +62,11 @@
             color: gray;
             /* Pasif durum renk */
         }
+
+        .status-red {
+            color: red;
+            /* Kırmızı renk */
+        }
     </style>
 </head>
 
@@ -82,31 +87,38 @@
         const sensorIcons = {
             1: {
                 icon: 'thermometer-sun',
-                statusOn: true
+                label: 'Temperature',
+                statusRed: true
             },
             2: {
                 icon: 'sun',
-                statusOn: true
+                label: 'Light',
+                statusGreen: true
             },
             3: {
                 icon: 'people',
-                statusOn: true
+                label: 'Motion',
+                statusGreen: true
             },
             5: {
                 icon: 'fire',
-                statusOn: true
+                label: 'Flame',
+                statusGreen: true
             },
             6: {
                 icon: 'ruler',
-                statusOn: true
+                label: 'Distance',
+                statusGreen: true
             },
             7: {
                 icon: 'droplet',
-                statusOn: true
+                label: 'Humidity',
+                statusRed: true
             },
             8: {
                 icon: 'cloud',
-                statusOn: true
+                label: 'Gas',
+                statusGreen: true
             }
         };
 
@@ -142,12 +154,13 @@
                 card.className = 'col';
                 var sensorIcon = getSensorIcon(reading.id);
                 var sensorStatusClass = reading.value === 1 ? 'status-on' : 'status-off';
+                var sensorValueDisplay = reading.id === 1 || reading.id === 7 ? '' : `Value: ${reading.value}`;
                 card.innerHTML = `
                     <div class="card h-100">
                         <div class="card-body text-center">
-                            <i class="bi bi-${sensorIcon.icon} sensor-icon ${sensorStatusClass}"></i>
+                            <i class="bi bi-${sensorIcon.icon} sensor-icon ${getSensorStatusClass(reading)}"></i>
                             <h5 class="card-title">${sensorIcon.label}</h5>
-                            <p class="card-text">Value: ${reading.value}</p>
+                            <p class="card-text">${sensorValueDisplay}</p>
                             <p class="card-text">Last Updated: ${formatDateTime(reading.updated_at)}</p>
                         </div>
                     </div>
@@ -163,6 +176,18 @@
             };
             var sensor = sensorIcons[sensorId] || defaultIcon;
             return sensor;
+        }
+
+        function getSensorStatusClass(reading) {
+            var sensorIcon = sensorIcons[reading.id];
+            if (sensorIcon) {
+                if (reading.id === 1 || reading.id === 7) {
+                    return sensorIcon.statusRed ? 'status-red' : 'status-on';
+                } else {
+                    return reading.value === 1 ? 'status-on' : 'status-off';
+                }
+            }
+            return '';
         }
 
         function formatDateTime(dateTime) {
