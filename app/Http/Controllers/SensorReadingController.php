@@ -96,7 +96,7 @@ class SensorReadingController extends Controller
         // hareket edildi alarm
         // elektrik fazla geliyor opt yapılmalı
 
-        return response()->json(['message' => 'Sensor reading updated successfully.ch4rybdis']);
+        return response()->json(['message' => 'Sensor reading updated successfully.']);
     }
 
     // Delete a specific sensor reading by id
