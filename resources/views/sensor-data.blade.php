@@ -60,12 +60,27 @@
 
         .status-off {
             color: red;
-            /* Pasif durum renk */
+            /* Pasif durum rengi */
         }
 
         .status-gray {
             color: gray;
             /* Gri durum rengi */
+        }
+
+        .status-blue {
+            color: blue;
+            /* Mavi durum rengi */
+        }
+
+        .status-green {
+            color: green;
+            /* Yeşil durum rengi */
+        }
+
+        .status-red {
+            color: red;
+            /* Kırmızı durum rengi */
         }
     </style>
 </head>
@@ -215,6 +230,11 @@
                     return `
                         <p class="card-text ${temperatureColorClass}">${temperatureDisplay}</p>
                     `;
+                } else if (reading.id === 6) {
+                    // Distance sensörü için özel durum
+                    return `
+                        <p class="card-text">Distance: ${reading.value} cm</p>
+                    `;
                 } else if (reading.id === 7) {
                     return `
                         <p class="card-text">Humidity: ${reading.value}</p>
@@ -250,8 +270,5 @@
                 minute: '2-digit',
                 second: '2-digit'
             });
-        }
-    </script>
-</body>
-
-</html>
+        } <
+        /
