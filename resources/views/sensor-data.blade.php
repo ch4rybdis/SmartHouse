@@ -33,21 +33,21 @@
         .card-title {
             color: #007bff;
             /* Kart başlık rengi (mavi) */
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             /* Kart başlık font büyüklüğü */
             margin-bottom: 0.75rem;
             /* Kart başlık alt boşluk */
         }
 
         .card-text {
-            font-size: 1rem;
+            font-size: 1.25rem;
             /* Kart metin font büyüklüğü */
             color: #666;
             /* Kart metin rengi */
         }
 
         .sensor-icon {
-            font-size: 2rem;
+            font-size: 4rem;
             /* İkon boyutu */
             margin-bottom: 0.5rem;
             /* İkon alt boşluk */
@@ -59,23 +59,13 @@
         }
 
         .status-off {
-            color: gray;
+            color: red;
             /* Pasif durum renk */
         }
 
-        .status-red {
-            color: red;
-            /* Kırmızı renk */
-        }
-
-        .status-blue {
-            color: blue;
-            /* Mavi renk */
-        }
-
-        .status-green {
-            color: green;
-            /* Yeşil renk */
+        .status-gray {
+            color: gray;
+            /* Gri durum rengi */
         }
     </style>
 </head>
@@ -220,18 +210,33 @@
             var sensorIcon = sensorIcons[reading.id];
             if (sensorIcon) {
                 if (reading.id === 1) {
+                    var temperatureColorClass = getStatusClassByTemperature(reading.value);
+                    var temperatureDisplay = getTemperatureDisplay(reading.value);
                     return `
-                        <p class="card-text">Temperature: ${reading.value} °C</p>
+                        <p class="card-text ${temperatureColorClass}">${temperatureDisplay}</p>
                     `;
                 } else if (reading.id === 7) {
                     return `
                         <p class="card-text">Humidity: ${reading.value}</p>
                     `;
                 } else {
-                    return '';
+                    var sensorStatusClass = reading.value === 1 ? 'status-on' : 'status-off';
+                    return `
+                        <p class="card-text ${sensorStatusClass}">${reading.value === 1 ? 'ON' : 'OFF'}</p>
+                    `;
                 }
             }
             return '';
+        }
+
+        function getTemperatureDisplay(value) {
+            if (value < 15) {
+                return `Temperature: ${value} °C (Cold)`;
+            } else if (value >= 15 && value < 30) {
+                return `Temperature: ${value} °C (Moderate)`;
+            } else {
+                return `Temperature: ${value} °C (Hot)`;
+            }
         }
 
         function formatDateTime(dateTime) {
