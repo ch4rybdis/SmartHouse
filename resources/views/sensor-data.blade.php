@@ -67,6 +67,16 @@
             color: red;
             /* Kırmızı renk */
         }
+
+        .status-blue {
+            color: blue;
+            /* Mavi renk */
+        }
+
+        .status-green {
+            color: green;
+            /* Yeşil renk */
+        }
     </style>
 </head>
 
@@ -83,12 +93,16 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
     <script>
-        // Veri türlerine göre ikonlar
+        // Veri türlerine göre ikonlar ve renklendirme kuralları
         const sensorIcons = {
             1: {
                 icon: 'thermometer-sun',
                 label: 'Temperature',
-                statusRed: true
+                statusBlue: true,
+                thresholds: {
+                    low: 15,
+                    medium: 30
+                }
             },
             2: {
                 icon: 'sun',
@@ -113,7 +127,7 @@
             7: {
                 icon: 'droplet',
                 label: 'Humidity',
-                statusRed: true
+                statusGreen: true
             },
             8: {
                 icon: 'cloud',
@@ -154,13 +168,13 @@
                 card.className = 'col';
                 var sensorIcon = getSensorIcon(reading.id);
                 var sensorStatusClass = reading.value === 1 ? 'status-on' : 'status-off';
-                var sensorValueDisplay = reading.id === 1 || reading.id === 7 ? '' : `Value: ${reading.value}`;
+                var sensorValueDisplay = getSensorValueDisplay(reading);
                 card.innerHTML = `
                     <div class="card h-100">
                         <div class="card-body text-center">
                             <i class="bi bi-${sensorIcon.icon} sensor-icon ${getSensorStatusClass(reading)}"></i>
                             <h5 class="card-title">${sensorIcon.label}</h5>
-                            <p class="card-text">${sensorValueDisplay}</p>
+                            ${sensorValueDisplay}
                             <p class="card-text">Last Updated: ${formatDateTime(reading.updated_at)}</p>
                         </div>
                     </div>
@@ -181,10 +195,40 @@
         function getSensorStatusClass(reading) {
             var sensorIcon = sensorIcons[reading.id];
             if (sensorIcon) {
-                if (reading.id === 1 || reading.id === 7) {
-                    return sensorIcon.statusRed ? 'status-red' : 'status-on';
+                if (reading.id === 1 && sensorIcon.statusBlue) {
+                    return getStatusClassByTemperature(reading.value);
                 } else {
                     return reading.value === 1 ? 'status-on' : 'status-off';
+                }
+            }
+            return '';
+        }
+
+        function getStatusClassByTemperature(value) {
+            var sensorStatusClass = '';
+            if (value < sensorIcons[1].thresholds.low) {
+                sensorStatusClass = 'status-blue';
+            } else if (value >= sensorIcons[1].thresholds.low && value < sensorIcons[1].thresholds.medium) {
+                sensorStatusClass = 'status-green';
+            } else {
+                sensorStatusClass = 'status-red';
+            }
+            return sensorStatusClass;
+        }
+
+        function getSensorValueDisplay(reading) {
+            var sensorIcon = sensorIcons[reading.id];
+            if (sensorIcon) {
+                if (reading.id === 1) {
+                    return `
+                        <p class="card-text">Temperature: ${reading.value} °C</p>
+                    `;
+                } else if (reading.id === 7) {
+                    return `
+                        <p class="card-text">Humidity: ${reading.value}</p>
+                    `;
+                } else {
+                    return '';
                 }
             }
             return '';
