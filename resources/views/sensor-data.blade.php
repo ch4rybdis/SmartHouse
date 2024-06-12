@@ -199,7 +199,6 @@
 
 
 
-
         function getSensorIcon(sensorId) {
             var defaultIcon = {
                 icon: 'question',
@@ -210,15 +209,19 @@
         }
 
 
-
         function getSensorStatusClass(reading) {
             var sensorIcon = sensorIcons[reading.id];
             if (sensorIcon) {
-                return reading.value === 1 ? 'status-on' : 'status-off';
+                if (reading.id === 1 && sensorIcon.statusBlue) {
+                    return getStatusClassByTemperature(reading.value);
+                } else if (reading.id === 7) {
+                    return getHumidityColorClass(reading.value);
+                } else {
+                    return reading.value === 1 ? 'status-on' : 'status-off';
+                }
             }
             return '';
         }
-
 
 
         function getSensorValueDisplay(reading) {
