@@ -181,24 +181,22 @@
                 var card = document.createElement('div');
                 card.className = 'col';
                 var sensorIcon = getSensorIcon(reading.id);
-                var sensorStatusClass = getSensorStatusClass(reading);
+                var sensorStatusClass = reading.value === 1 ? getSensorStatusClass(reading.id, reading.value) :
+                    'status-off';
                 var sensorValueDisplay = getSensorValueDisplay(reading);
                 card.innerHTML = `
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-${sensorIcon.icon} sensor-icon ${sensorStatusClass}"></i>
-                    <h5 class="card-title">${sensorIcon.label}</h5>
-                    ${sensorValueDisplay}
-                    <p class="card-text">Last Updated: ${formatDateTime(reading.updated_at)}</p>
-                </div>
-            </div>
-        `;
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-${sensorIcon.icon} sensor-icon ${sensorStatusClass}"></i>
+                            <h5 class="card-title">${sensorIcon.label}</h5>
+                            ${sensorValueDisplay}
+                            <p class="card-text">Last Updated: ${formatDateTime(reading.updated_at)}</p>
+                        </div>
+                    </div>
+                `;
                 readingCards.appendChild(card);
             });
         }
-
-
-
 
         function getSensorIcon(sensorId) {
             var defaultIcon = {
@@ -209,17 +207,19 @@
             return sensor;
         }
 
-
-
-        function getSensorStatusClass(reading) {
-            var sensorIcon = sensorIcons[reading.id];
+        function getSensorStatusClass(sensorId, value) {
+            var sensorIcon = sensorIcons[sensorId];
             if (sensorIcon) {
-                return reading.value === 1 ? 'status-on' : 'status-off';
+                if (sensorIcon.statusOn && value === 1) {
+                    return sensorIcon.statusOn;
+                } else if (sensorIcon.statusOff && value === 0) {
+                    return sensorIcon.statusOff;
+                } else {
+                    return 'status-gray';
+                }
             }
             return '';
         }
-
-
 
         function getSensorValueDisplay(reading) {
             var sensorIcon = sensorIcons[reading.id];
@@ -238,7 +238,7 @@
                 } else if (reading.id === 7) {
                     // Humidity sensörü için özel durum
                     return `
-                        <p class="card-text ${getHumidityColorClass(reading.value)}">% ${reading.value}</p>
+                        <p class="card-text ${getHumidityColorClass(reading.value)}">Nem Oranı: ${reading.value}%</p>
                     `;
                 } else {
                     var sensorStatusClass = reading.value === 1 ? 'status-on' : 'status-off';
