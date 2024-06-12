@@ -238,7 +238,7 @@
                 } else if (reading.id === 7) {
                     // Humidity sensörü için özel durum
                     return `
-                        <p class="card-text ${getHumidityColorClass(reading.value)}">${reading.value}%</p>
+                        <p class="card-text ${getHumidityColorClass(reading.value)}">% ${reading.value}</p>
                     `;
                 } else {
                     var sensorStatusClass = reading.value === 1 ? 'status-on' : 'status-off';
