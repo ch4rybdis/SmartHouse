@@ -12,7 +12,7 @@ class SensorReadingController extends Controller
 
     public function main()
     {
-        return SensorReading::all();
+        return view('sensor-data');
     }
     public function index()
     {
