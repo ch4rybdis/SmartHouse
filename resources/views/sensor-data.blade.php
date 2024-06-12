@@ -12,7 +12,7 @@
     <style>
         /* Stillemeler */
         body {
-            background-color: #f0f0f0;
+            background-color: #f8f9fa;
             /* Genel arka plan rengi */
             color: #333;
             /* Genel yazı rengi */
@@ -22,13 +22,6 @@
         .container {
             background-color: #f8f9fa;
             /* Ana container arka plan rengi */
-            padding: 20px;
-            /* Container iç boşlukları */
-            border-radius: 8px;
-            /* Kenar yuvarlaklığı */
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-            /* Gölge */
-            margin-top: 20px;
         }
 
         .card {
@@ -66,12 +59,12 @@
         }
 
         .status-on {
-            color: red;
+            color: green;
             /* Etkin durum renk */
         }
 
         .status-off {
-            color: green;
+            color: red;
             /* Pasif durum rengi */
         }
 
@@ -124,17 +117,20 @@
             2: {
                 icon: 'sun',
                 label: 'Light',
-                statusGreen: true
+                statusOn: 'status-green',
+                statusOff: 'status-red'
             },
             3: {
                 icon: 'people',
                 label: 'Motion',
-                statusGreen: true
+                statusOn: 'status-green',
+                statusOff: 'status-red'
             },
             5: {
                 icon: 'fire',
                 label: 'Flame',
-                statusGreen: false
+                statusOn: 'status-red',
+                statusOff: 'status-green'
             },
             6: {
                 icon: 'cone',
@@ -149,7 +145,8 @@
             8: {
                 icon: 'cloud',
                 label: 'Gas',
-                statusGreen: false
+                statusOn: 'status-red',
+                statusOff: 'status-green'
             }
         };
 
@@ -184,12 +181,13 @@
                 var card = document.createElement('div');
                 card.className = 'col';
                 var sensorIcon = getSensorIcon(reading.id);
-                var sensorStatusClass = reading.value === 1 ? 'status-on' : 'status-off';
+                var sensorStatusClass = reading.value === 1 ? getSensorStatusClass(reading.id, reading.value) :
+                    'status-off';
                 var sensorValueDisplay = getSensorValueDisplay(reading);
                 card.innerHTML = `
                     <div class="card h-100">
                         <div class="card-body text-center">
-                            <i class="bi bi-${sensorIcon.icon} sensor-icon ${getSensorStatusClass(reading)}"></i>
+                            <i class="bi bi-${sensorIcon.icon} sensor-icon ${sensorStatusClass}"></i>
                             <h5 class="card-title">${sensorIcon.label}</h5>
                             ${sensorValueDisplay}
                             <p class="card-text">Last Updated: ${formatDateTime(reading.updated_at)}</p>
@@ -209,36 +207,18 @@
             return sensor;
         }
 
-        function getSensorStatusClass(reading) {
-            var sensorIcon = sensorIcons[reading.id];
+        function getSensorStatusClass(sensorId, value) {
+            var sensorIcon = sensorIcons[sensorId];
             if (sensorIcon) {
-                if (reading.id === 1 && sensorIcon.statusBlue) {
-                    return getStatusClassByTemperature(reading.value);
-                } else if (reading.id === 5 || reading.id === 8) {
-                    return reading.value === 1 ? 'status-red' : 'status-green';
-                } else if (reading.id === 7) {
-                    return getStatusClassByHumidity(reading.value);
+                if (sensorIcon.statusOn && value === 1) {
+                    return sensorIcon.statusOn;
+                } else if (sensorIcon.statusOff && value === 0) {
+                    return sensorIcon.statusOff;
                 } else {
-                    return reading.value === 1 ? 'status-on' : 'status-off';
+                    return 'status-gray';
                 }
             }
             return '';
-        }
-
-        function getStatusClassByTemperature(value) {
-            var sensorStatusClass = '';
-            if (value < sensorIcons[1].thresholds.low) {
-                sensorStatusClass = 'status-blue';
-            } else if (value >= sensorIcons[1].thresholds.low && value < sensorIcons[1].thresholds.medium) {
-                sensorStatusClass = 'status-green';
-            } else {
-                sensorStatusClass = 'status-red';
-            }
-            return sensorStatusClass;
-        }
-
-        function getStatusClassByHumidity(value) {
-            return value > 50 ? 'status-red' : 'status-green';
         }
 
         function getSensorValueDisplay(reading) {
@@ -253,10 +233,12 @@
                 } else if (reading.id === 6) {
                     // Distance sensörü için özel durum
                     return `
-                        <p class="card-text"><i class="bi bi-${sensorIcon.icon}"></i>  ${reading.value} cm</p`;
+                        <p class="card-text"><i class="bi bi-${sensorIcon.icon}"></i>  ${reading.value} cm</p>
+                    `;
                 } else if (reading.id === 7) {
+                    // Humidity sensörü için özel durum
                     return `
-                        <p class="card-text"> % ${reading.value}</p>
+                        <p class="card-text ${getHumidityColorClass(reading.value)}">Nem Oranı: ${reading.value}%</p>
                     `;
                 } else {
                     var sensorStatusClass = reading.value === 1 ? 'status-on' : 'status-off';
@@ -273,18 +255,34 @@
             return `${value} °C`;
         }
 
-        function formatDateTime(dateTime) {
-            var date = new Date(dateTime);
-            return date.toLocaleString('en-US', {
-                hour12: false,
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric'
-            });
-        }
+        function getStatusClassByTemperature(value) {
+            var sensorStatusClass = '';
+            if (value < sensorIcons[1].thresholds.low) {
+                sensorStatusClass = 'status-blue';
+            } else if (value >= sensorIcons[1].thresholds.low && value < sensorIcons[1].thresholds.medium) {
+                sensorStatusClass = 'status-green}
+                else {
+                    sensorStatusClass = 'status-red';
+                }
+                return sensorStatusClass;
+            }
+
+            function getHumidityColorClass(value) {
+                return value > 50 ? 'status-red' : 'status-green';
+            }
+
+            function formatDateTime(dateTime) {
+                var date = new Date(dateTime);
+                return date.toLocaleString('en-US', {
+                    hour12: false,
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+            }
     </script>
 </body>
 
