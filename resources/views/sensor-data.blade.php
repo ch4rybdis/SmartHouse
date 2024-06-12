@@ -45,6 +45,13 @@
             color: #666;
             /* Kart metin rengi */
         }
+
+        .sensor-icon {
+            font-size: 2rem;
+            /* İkon boyutu */
+            margin-bottom: 0.5rem;
+            /* İkon alt boşluk */
+        }
     </style>
 </head>
 
@@ -61,6 +68,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
     <script>
+        // Veri türlerine göre ikonlar
+        const sensorIcons = {
+            temperature: 'thermometer-sun',
+            light: 'sun',
+            motion: 'people',
+            flame: 'fire',
+            distance: 'ruler',
+            humidity: 'droplet',
+            gas: 'cloud',
+            default: 'question'
+        };
+
         // Belirli aralıklarla verileri güncellemek için setInterval kullanabiliriz
         setInterval(fetchSensorData, 1000); // 1 saniyede bir güncelle
 
@@ -93,7 +112,8 @@
                 card.className = 'col';
                 card.innerHTML = `
                     <div class="card h-100">
-                        <div class="card-body">
+                        <div class="card-body text-center">
+                            <i class="bi bi-${getIcon(reading.sensor_type)} sensor-icon text-primary"></i>
                             <h5 class="card-title">${reading.sensor_type}</h5>
                             <p class="card-text">Value: ${reading.value}</p>
                             <p class="card-text">Last Updated: ${formatDateTime(reading.updated_at)}</p>
@@ -102,6 +122,10 @@
                 `;
                 readingCards.appendChild(card);
             });
+        }
+
+        function getIcon(sensorType) {
+            return sensorIcons[sensorType] || sensorIcons.default;
         }
 
         function formatDateTime(dateTime) {
