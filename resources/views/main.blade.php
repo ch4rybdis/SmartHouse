@@ -1,3 +1,4 @@
+<!-- resources/views/sensor_data.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +10,7 @@
 
 <body>
     <div id="app">
-        <sensor-data-component></sensor-data-component>
+        <sensor-data-component :initial-readings="{{ json_encode($readings) }}"></sensor-data-component>
     </div>
 
     <script src="{{ mix('js/app.js') }}"></script>

@@ -1,3 +1,5 @@
+// resources/js/app.js
+
 require('./bootstrap');
 
 import { createApp } from 'vue';

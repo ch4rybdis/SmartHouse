@@ -1,3 +1,4 @@
+<!-- resources/js/components/SensorDataComponent.vue -->
 <template>
     <div>
       <h1>Sensor Data</h1>
@@ -11,9 +12,15 @@
 
   <script>
   export default {
+    props: {
+      initialReadings: {
+        type: Array,
+        required: true
+      }
+    },
     data() {
       return {
-        readings: [],
+        readings: this.initialReadings,
       };
     },
     mounted() {
