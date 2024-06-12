@@ -122,7 +122,7 @@
             5: {
                 icon: 'fire',
                 label: 'Flame',
-                statusGreen: false
+                statusGreen: true
             },
             6: {
                 icon: 'cone',
@@ -137,7 +137,7 @@
             8: {
                 icon: 'cloud',
                 label: 'Gas',
-                statusGreen: false
+                statusGreen: true
             }
         };
 
@@ -172,12 +172,12 @@
                 var card = document.createElement('div');
                 card.className = 'col';
                 var sensorIcon = getSensorIcon(reading.id);
-                var sensorStatusClass = reading.value === 1 ? 'status-on' : 'status-off';
+                var sensorStatusClass = getSensorStatusClass(reading);
                 var sensorValueDisplay = getSensorValueDisplay(reading);
                 card.innerHTML = `
                     <div class="card h-100">
                         <div class="card-body text-center">
-                            <i class="bi bi-${sensorIcon.icon} sensor-icon ${getSensorStatusClass(reading)}"></i>
+                            <i class="bi bi-${sensorIcon.icon} sensor-icon ${sensorStatusClass}"></i>
                             <h5 class="card-title">${sensorIcon.label}</h5>
                             ${sensorValueDisplay}
                             <p class="card-text">Last Updated: ${formatDateTime(reading.updated_at)}</p>
@@ -202,6 +202,10 @@
             if (sensorIcon) {
                 if (reading.id === 1 && sensorIcon.statusBlue) {
                     return getStatusClassByTemperature(reading.value);
+                } else if (reading.id === 5 || reading.id === 8) {
+                    return reading.value === 1 ? 'status-red' : 'status-green';
+                } else if (reading.id === 7 && sensorIcon.statusGreen) {
+                    return getStatusClassByHumidity(reading.value);
                 } else {
                     return reading.value === 1 ? 'status-on' : 'status-off';
                 }
@@ -221,6 +225,10 @@
             return sensorStatusClass;
         }
 
+        function getStatusClassByHumidity(value) {
+            return value > 50 ? 'status-red' : 'status-green';
+        }
+
         function getSensorValueDisplay(reading) {
             var sensorIcon = sensorIcons[reading.id];
             if (sensorIcon) {
@@ -233,11 +241,12 @@
                 } else if (reading.id === 6) {
                     // Distance sensörü için özel durum
                     return `
-                        <p class="card-text"><i class="bi bi-${sensorIcon.icon}"></i>  ${reading.value} cm</p>
+                        <p class="card-text"><i class="bi bi-${sensorIcon.icon}"></i> ${reading.value} cm</p>
                     `;
                 } else if (reading.id === 7) {
+                    var humidityColorClass = getStatusClassByHumidity(reading.value);
                     return `
-                        <p class="card-text"> % ${reading.value}</p>
+                        <p class="card-text ${humidityColorClass}">Humidity: ${reading.value}%</p>
                     `;
                 } else {
                     var sensorStatusClass = reading.value === 1 ? 'status-on' : 'status-off';
@@ -250,13 +259,7 @@
         }
 
         function getTemperatureDisplay(value) {
-            if (value < 15) {
-                return ` ${value} °C `;
-            } else if (value >= 15 && value < 30) {
-                return ` ${value} °C `;
-            } else {
-                return ` ${value} °C `;
-            }
+            return `${value} °C`;
         }
 
         function formatDateTime(dateTime) {
