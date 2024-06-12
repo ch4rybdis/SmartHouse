@@ -9,10 +9,47 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Optional: Bootstrap Icons (for icons) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        /* Stillemeler */
+        body {
+            background-color: #f0f0f0;
+            /* Genel arka plan rengi */
+            color: #333;
+            /* Genel yazı rengi */
+            padding-top: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            /* Kart arka plan rengi */
+            border: 1px solid #ddd;
+            /* Kart kenarlık rengi */
+            border-radius: 8px;
+            /* Kart kenar yuvarlaklığı */
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+            /* Kart gölgesi */
+        }
+
+        .card-title {
+            color: #007bff;
+            /* Kart başlık rengi (mavi) */
+            font-size: 1.25rem;
+            /* Kart başlık font büyüklüğü */
+            margin-bottom: 0.75rem;
+            /* Kart başlık alt boşluk */
+        }
+
+        .card-text {
+            font-size: 1rem;
+            /* Kart metin font büyüklüğü */
+            color: #666;
+            /* Kart metin rengi */
+        }
+    </style>
 </head>
 
 <body>
-    <div id="sensor-data" class="container mt-4">
+    <div id="sensor-data" class="container">
         <h1 class="mb-4">Sensor Data</h1>
         <div id="reading-cards" class="row row-cols-1 row-cols-md-3 g-4">
             <!-- Burada veriler dinamik olarak eklenecek -->
