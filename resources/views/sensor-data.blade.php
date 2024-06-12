@@ -125,7 +125,7 @@
                 statusGreen: true
             },
             6: {
-                icon: 'arrow',
+                icon: 'cone',
                 label: 'Distance',
                 statusGreen: true
             },
