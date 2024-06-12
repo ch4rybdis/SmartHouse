@@ -5,15 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sensor Data</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional: Bootstrap Icons (for icons) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 
 <body>
-    <div id="sensor-data">
-        <h1>Sensor Data</h1>
-        <div id="reading-cards" class="card-deck">
+    <div id="sensor-data" class="container mt-4">
+        <h1 class="mb-4">Sensor Data</h1>
+        <div id="reading-cards" class="row row-cols-1 row-cols-md-3 g-4">
             <!-- Burada veriler dinamik olarak eklenecek -->
         </div>
     </div>
+
+    <!-- Bootstrap JS (for Bootstrap's JavaScript plugins, including Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
     <script>
         // Belirli aralıklarla verileri güncellemek için setInterval kullanabiliriz
@@ -45,22 +53,16 @@
             // Yeni verileri kartlar halinde göster
             readings.forEach(function(reading) {
                 var card = document.createElement('div');
-                card.className = 'card mb-3';
-                var cardBody = document.createElement('div');
-                cardBody.className = 'card-body';
-                var cardTitle = document.createElement('h5');
-                cardTitle.className = 'card-title';
-                cardTitle.textContent = reading.sensor_type;
-                var cardText = document.createElement('p');
-                cardText.className = 'card-text';
-                cardText.textContent = 'Value: ' + reading.value;
-                var cardTimestamp = document.createElement('p');
-                cardTimestamp.className = 'card-text';
-                cardTimestamp.textContent = 'Last Updated: ' + formatDateTime(reading.updated_at);
-                cardBody.appendChild(cardTitle);
-                cardBody.appendChild(cardText);
-                cardBody.appendChild(cardTimestamp);
-                card.appendChild(cardBody);
+                card.className = 'col';
+                card.innerHTML = `
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">${reading.sensor_type}</h5>
+                            <p class="card-text">Value: ${reading.value}</p>
+                            <p class="card-text">Last Updated: ${formatDateTime(reading.updated_at)}</p>
+                        </div>
+                    </div>
+                `;
                 readingCards.appendChild(card);
             });
         }
