@@ -1,5 +1,3 @@
-<!-- resources/views/sensor-data.blade.php veya plain HTML dosyası -->
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,22 +8,47 @@
 </head>
 
 <body>
-    <div id="app">
-        <sensor-data-component></sensor-data-component>
+    <div id="sensor-data">
+        <h1>Sensor Data</h1>
+        <ul id="reading-list">
+            <!-- Burada veriler dinamik olarak eklenecek -->
+        </ul>
     </div>
 
-    <!-- Vue.js ve Axios kütüphanelerini dahil et -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-    <!-- Derlenmiş Vue bileşeni -->
-    <script src="{{ asset('js/app.js') }}"></script> <!-- Laravel Mix ile derlenmiş js dosyası -->
-
-    <!-- Vue uygulamasını oluşturma -->
     <script>
-        new Vue({
-            el: '#app',
-        });
+        // Belirli aralıklarla verileri güncellemek için setInterval kullanabiliriz
+        setInterval(fetchSensorData, 1000); // 1 saniyede bir güncelle
+
+        function fetchSensorData() {
+            // AJAX kullanarak verileri GET isteği ile çekiyoruz
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/api/sensor-readings', true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Başarılı cevap aldığımızda verileri güncelliyoruz
+                    var readings = JSON.parse(xhr.responseText);
+                    updateSensorReadings(readings);
+                } else {
+                    console.error('Error fetching sensor readings:', xhr.statusText);
+                }
+            };
+            xhr.onerror = function() {
+                console.error('Network error fetching sensor readings.');
+            };
+            xhr.send();
+        }
+
+        function updateSensorReadings(readings) {
+            var readingList = document.getElementById('reading-list');
+            // Mevcut listeyi temizle
+            readingList.innerHTML = '';
+            // Yeni verileri listeye ekleyin
+            readings.forEach(function(reading) {
+                var li = document.createElement('li');
+                li.textContent = reading.sensor_type + ': ' + reading.value + ' (' + reading.updated_at + ')';
+                readingList.appendChild(li);
+            });
+        }
     </script>
 </body>
 
