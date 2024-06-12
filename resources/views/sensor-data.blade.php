@@ -122,7 +122,7 @@
             5: {
                 icon: 'fire',
                 label: 'Flame',
-                statusGreen: true
+                statusGreen: false
             },
             6: {
                 icon: 'cone',
@@ -137,7 +137,7 @@
             8: {
                 icon: 'cloud',
                 label: 'Gas',
-                statusGreen: true
+                statusGreen: false
             }
         };
 
