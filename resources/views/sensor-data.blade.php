@@ -18,16 +18,13 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-    <!-- Vue bileşeni bağlama -->
-    <script src="{{ asset('js/components/SensorDataComponent.vue') }}"></script>
+    <!-- Derlenmiş Vue bileşeni -->
+    <script src="{{ asset('js/app.js') }}"></script> <!-- Laravel Mix ile derlenmiş js dosyası -->
 
     <!-- Vue uygulamasını oluşturma -->
     <script>
         new Vue({
             el: '#app',
-            components: {
-                'sensor-data-component': window['SensorDataComponent'] // Bileşen adı ile eşleştirme yapılmalıdır
-            }
         });
     </script>
 </body>
