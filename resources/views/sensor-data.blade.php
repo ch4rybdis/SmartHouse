@@ -260,29 +260,29 @@
             if (value < sensorIcons[1].thresholds.low) {
                 sensorStatusClass = 'status-blue';
             } else if (value >= sensorIcons[1].thresholds.low && value < sensorIcons[1].thresholds.medium) {
-                sensorStatusClass = 'status-green}
-                else {
-                    sensorStatusClass = 'status-red';
-                }
-                return sensorStatusClass;
+                sensorStatusClass = 'status-green'
+            } else {
+                sensorStatusClass = 'status-red';
             }
+            return sensorStatusClass;
+        }
 
-            function getHumidityColorClass(value) {
-                return value > 50 ? 'status-red' : 'status-green';
-            }
+        function getHumidityColorClass(value) {
+            return value > 50 ? 'status-red' : 'status-green';
+        }
 
-            function formatDateTime(dateTime) {
-                var date = new Date(dateTime);
-                return date.toLocaleString('en-US', {
-                    hour12: false,
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                });
-            }
+        function formatDateTime(dateTime) {
+            var date = new Date(dateTime);
+            return date.toLocaleString('en-US', {
+                hour12: false,
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
     </script>
 </body>
 
