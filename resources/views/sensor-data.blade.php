@@ -125,7 +125,7 @@
                 statusGreen: true
             },
             6: {
-                icon: 'ruler',
+                icon: 'counter',
                 label: 'Distance',
                 statusGreen: true
             },
