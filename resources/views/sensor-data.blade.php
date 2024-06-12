@@ -233,11 +233,11 @@
                 } else if (reading.id === 6) {
                     // Distance sensörü için özel durum
                     return `
-                        <p class="card-text"><i class="bi bi-${sensorIcon.icon}"></i> Distance: ${reading.value} cm</p>
+                        <p class="card-text"><i class="bi bi-${sensorIcon.icon}"></i>  ${reading.value} cm</p>
                     `;
                 } else if (reading.id === 7) {
                     return `
-                        <p class="card-text">Humidity: ${reading.value}</p>
+                        <p class="card-text"> % ${reading.value}</p>
                     `;
                 } else {
                     var sensorStatusClass = reading.value === 1 ? 'status-on' : 'status-off';
@@ -251,11 +251,11 @@
 
         function getTemperatureDisplay(value) {
             if (value < 15) {
-                return `Temperature: ${value} °C (Cold)`;
+                return ` ${value} °C `;
             } else if (value >= 15 && value < 30) {
-                return `Temperature: ${value} °C (Moderate)`;
+                return ` ${value} °C `;
             } else {
-                return `Temperature: ${value} °C (Hot)`;
+                return ` ${value} °C `;
             }
         }
 
