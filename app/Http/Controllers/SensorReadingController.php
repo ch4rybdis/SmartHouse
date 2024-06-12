@@ -21,7 +21,7 @@ class SensorReadingController extends Controller
             return $reading;
         });
 
-        return response()->json($readings);
+        return view('sensor_data', ['readings' => $readings]);
     }
     public function index()
     {
