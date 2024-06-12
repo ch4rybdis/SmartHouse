@@ -12,16 +12,7 @@ class SensorReadingController extends Controller
 
     public function main()
     {
-        $readings = SensorReading::all()->map(function ($reading) {
-            // Veritabanındaki UTC zamanını İstanbul saatine dönüştür
-            $utcUpdatedAt = new \DateTime($reading->updated_at, new \DateTimeZone('UTC'));
-            $utcUpdatedAt->setTimezone(new \DateTimeZone('Europe/Istanbul'));
-            $reading->updated_at = $utcUpdatedAt->format('Y-m-d H:i:s');
-
-            return $reading;
-        });
-
-        return view('main', ['readings' => $readings]);
+        return SensorReading::all();
     }
     public function index()
     {
