@@ -197,6 +197,7 @@
             });
         }
 
+
         function getHumidityColorClass(value) {
             return value > 50 ? 'status-red' : 'status-green';
         }
@@ -211,19 +212,15 @@
         }
 
 
+
         function getSensorStatusClass(reading) {
             var sensorIcon = sensorIcons[reading.id];
             if (sensorIcon) {
-                if (reading.id === 1 && sensorIcon.statusBlue) {
-                    return getStatusClassByTemperature(reading.value);
-                } else if (reading.id === 7) {
-                    return getHumidityColorClass(reading.value);
-                } else {
-                    return reading.value === 1 ? 'status-on' : 'status-off';
-                }
+                return reading.value === 1 ? 'status-on' : 'status-off';
             }
             return '';
         }
+
 
 
         function getSensorValueDisplay(reading) {
