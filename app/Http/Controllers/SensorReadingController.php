@@ -8,6 +8,12 @@ use App\Models\SensorReading;
 class SensorReadingController extends Controller
 {
     // Retrieve all sensor readings
+
+
+    public function main()
+    {
+        return view('main');
+    }
     public function index()
     {
         $readings = SensorReading::all()->map(function ($reading) {
@@ -90,7 +96,7 @@ class SensorReadingController extends Controller
         // hareket edildi alarm
         // elektrik fazla geliyor opt yapılmalı
 
-        return response()->json(['message' => 'Sensor reading updated successfully_ch4rybdis']);
+        return response()->json(['message' => 'Sensor reading updated successfully.']);
     }
 
     // Delete a specific sensor reading by id
