@@ -19,6 +19,18 @@
             padding-top: 20px;
         }
 
+        .container {
+            background-color: #f8f9fa;
+            /* Ana container arka plan rengi */
+            padding: 20px;
+            /* Container iç boşlukları */
+            border-radius: 8px;
+            /* Kenar yuvarlaklığı */
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+            /* Gölge */
+            margin-top: 20px;
+        }
+
         .card {
             background-color: #fff;
             /* Kart arka plan rengi */
@@ -54,12 +66,12 @@
         }
 
         .status-on {
-            color: green;
+            color: red;
             /* Etkin durum renk */
         }
 
         .status-off {
-            color: red;
+            color: green;
             /* Pasif durum rengi */
         }
 
@@ -87,7 +99,7 @@
 
 <body>
     <div id="sensor-data" class="container">
-        <h1 class="mb-4">Sensor Data</h1>
+        <h1 class="mb-4" style="color: #007bff;">Sensor Data</h1>
         <div id="reading-cards" class="row row-cols-1 row-cols-md-3 g-4">
             <!-- Burada veriler dinamik olarak eklenecek -->
         </div>
@@ -122,7 +134,7 @@
             5: {
                 icon: 'fire',
                 label: 'Flame',
-                statusGreen: true
+                statusGreen: false
             },
             6: {
                 icon: 'cone',
@@ -137,7 +149,7 @@
             8: {
                 icon: 'cloud',
                 label: 'Gas',
-                statusGreen: true
+                statusGreen: false
             }
         };
 
@@ -172,12 +184,12 @@
                 var card = document.createElement('div');
                 card.className = 'col';
                 var sensorIcon = getSensorIcon(reading.id);
-                var sensorStatusClass = getSensorStatusClass(reading);
+                var sensorStatusClass = reading.value === 1 ? 'status-on' : 'status-off';
                 var sensorValueDisplay = getSensorValueDisplay(reading);
                 card.innerHTML = `
                     <div class="card h-100">
                         <div class="card-body text-center">
-                            <i class="bi bi-${sensorIcon.icon} sensor-icon ${sensorStatusClass}"></i>
+                            <i class="bi bi-${sensorIcon.icon} sensor-icon ${getSensorStatusClass(reading)}"></i>
                             <h5 class="card-title">${sensorIcon.label}</h5>
                             ${sensorValueDisplay}
                             <p class="card-text">Last Updated: ${formatDateTime(reading.updated_at)}</p>
@@ -204,7 +216,7 @@
                     return getStatusClassByTemperature(reading.value);
                 } else if (reading.id === 5 || reading.id === 8) {
                     return reading.value === 1 ? 'status-red' : 'status-green';
-                } else if (reading.id === 7 && sensorIcon.statusGreen) {
+                } else if (reading.id === 7) {
                     return getStatusClassByHumidity(reading.value);
                 } else {
                     return reading.value === 1 ? 'status-on' : 'status-off';
@@ -241,17 +253,16 @@
                 } else if (reading.id === 6) {
                     // Distance sensörü için özel durum
                     return `
-                        <p class="card-text"><i class="bi bi-${sensorIcon.icon}"></i> ${reading.value} cm</p>
-                    `;
+                        <p class="card-text"><i class="bi bi-${sensorIcon.icon}"></i>  ${reading.value} cm</p`;
                 } else if (reading.id === 7) {
-                    var humidityColorClass = getStatusClassByHumidity(reading.value);
                     return `
-                        <p class="card-text ${humidityColorClass}">Humidity: ${reading.value}%</p>
+                        <p class="card-text"> % ${reading.value}</p>
                     `;
                 } else {
                     var sensorStatusClass = reading.value === 1 ? 'status-on' : 'status-off';
+                    var sensorStatusText = reading.value === 1 ? 'ON' : 'OFF';
                     return `
-                        <p class="card-text ${sensorStatusClass}">${reading.value === 1 ? 'ON' : 'OFF'}</p>
+                        <p class="card-text ${sensorStatusClass}">${sensorStatusText}</p>
                     `;
                 }
             }
@@ -267,11 +278,11 @@
             return date.toLocaleString('en-US', {
                 hour12: false,
                 year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
+                month: 'short',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric'
             });
         }
     </script>
