@@ -10,9 +10,9 @@
 <body>
     <div id="sensor-data">
         <h1>Sensor Data</h1>
-        <ul id="reading-list">
+        <div id="reading-cards" class="card-deck">
             <!-- Burada veriler dinamik olarak eklenecek -->
-        </ul>
+        </div>
     </div>
 
     <script>
@@ -39,14 +39,42 @@
         }
 
         function updateSensorReadings(readings) {
-            var readingList = document.getElementById('reading-list');
-            // Mevcut listeyi temizle
-            readingList.innerHTML = '';
-            // Yeni verileri listeye ekleyin
+            var readingCards = document.getElementById('reading-cards');
+            // Mevcut kartları temizle
+            readingCards.innerHTML = '';
+            // Yeni verileri kartlar halinde göster
             readings.forEach(function(reading) {
-                var li = document.createElement('li');
-                li.textContent = reading.sensor_type + ': ' + reading.value + ' (' + reading.updated_at + ')';
-                readingList.appendChild(li);
+                var card = document.createElement('div');
+                card.className = 'card mb-3';
+                var cardBody = document.createElement('div');
+                cardBody.className = 'card-body';
+                var cardTitle = document.createElement('h5');
+                cardTitle.className = 'card-title';
+                cardTitle.textContent = reading.sensor_type;
+                var cardText = document.createElement('p');
+                cardText.className = 'card-text';
+                cardText.textContent = 'Value: ' + reading.value;
+                var cardTimestamp = document.createElement('p');
+                cardTimestamp.className = 'card-text';
+                cardTimestamp.textContent = 'Last Updated: ' + formatDateTime(reading.updated_at);
+                cardBody.appendChild(cardTitle);
+                cardBody.appendChild(cardText);
+                cardBody.appendChild(cardTimestamp);
+                card.appendChild(cardBody);
+                readingCards.appendChild(card);
+            });
+        }
+
+        function formatDateTime(dateTime) {
+            var date = new Date(dateTime);
+            return date.toLocaleString('en-US', {
+                hour12: false,
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
             });
         }
     </script>
