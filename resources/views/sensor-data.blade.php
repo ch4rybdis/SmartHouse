@@ -198,9 +198,7 @@
         }
 
 
-        function getHumidityColorClass(value) {
-            return value > 50 ? 'status-red' : 'status-green';
-        }
+
 
         function getSensorIcon(sensorId) {
             var defaultIcon = {
