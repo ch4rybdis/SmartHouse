@@ -7,7 +7,7 @@
     <title>Sensor Data</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Optional: Bootstrap Icons (for icons) -->
+    <!-- Bootstrap Icons (for icons) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         /* Stillemeler */
@@ -52,6 +52,16 @@
             margin-bottom: 0.5rem;
             /* İkon alt boşluk */
         }
+
+        .status-on {
+            color: green;
+            /* Etkin durum renk */
+        }
+
+        .status-off {
+            color: gray;
+            /* Pasif durum renk */
+        }
     </style>
 </head>
 
@@ -70,14 +80,34 @@
     <script>
         // Veri türlerine göre ikonlar
         const sensorIcons = {
-            temperature: 'thermometer-sun',
-            light: 'sun',
-            motion: 'people',
-            flame: 'fire',
-            distance: 'ruler',
-            humidity: 'droplet',
-            gas: 'cloud',
-            default: 'question'
+            1: {
+                icon: 'thermometer-sun',
+                statusOn: true
+            },
+            2: {
+                icon: 'sun',
+                statusOn: true
+            },
+            3: {
+                icon: 'people',
+                statusOn: true
+            },
+            5: {
+                icon: 'fire',
+                statusOn: true
+            },
+            6: {
+                icon: 'ruler',
+                statusOn: true
+            },
+            7: {
+                icon: 'droplet',
+                statusOn: true
+            },
+            8: {
+                icon: 'cloud',
+                statusOn: true
+            }
         };
 
         // Belirli aralıklarla verileri güncellemek için setInterval kullanabiliriz
@@ -110,11 +140,13 @@
             readings.forEach(function(reading) {
                 var card = document.createElement('div');
                 card.className = 'col';
+                var sensorIcon = getSensorIcon(reading.id);
+                var sensorStatusClass = reading.value === 1 ? 'status-on' : 'status-off';
                 card.innerHTML = `
                     <div class="card h-100">
                         <div class="card-body text-center">
-                            <i class="bi bi-${getIcon(reading.sensor_type)} sensor-icon text-primary"></i>
-                            <h5 class="card-title">${reading.sensor_type}</h5>
+                            <i class="bi bi-${sensorIcon.icon} sensor-icon ${sensorStatusClass}"></i>
+                            <h5 class="card-title">${sensorIcon.label}</h5>
                             <p class="card-text">Value: ${reading.value}</p>
                             <p class="card-text">Last Updated: ${formatDateTime(reading.updated_at)}</p>
                         </div>
@@ -124,8 +156,13 @@
             });
         }
 
-        function getIcon(sensorType) {
-            return sensorIcons[sensorType] || sensorIcons.default;
+        function getSensorIcon(sensorId) {
+            var defaultIcon = {
+                icon: 'question',
+                label: 'Unknown Sensor'
+            };
+            var sensor = sensorIcons[sensorId] || defaultIcon;
+            return sensor;
         }
 
         function formatDateTime(dateTime) {
