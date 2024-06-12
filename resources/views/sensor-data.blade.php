@@ -233,7 +233,7 @@
                 } else if (reading.id === 6) {
                     // Distance sensörü için özel durum
                     return `
-                        <p class="card-text">Distance: ${reading.value} cm</p>
+                        <p class="card-text"><i class="bi bi-${sensorIcon.icon}"></i> Distance: ${reading.value} cm</p>
                     `;
                 } else if (reading.id === 7) {
                     return `
