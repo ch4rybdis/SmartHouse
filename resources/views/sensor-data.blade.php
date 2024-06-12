@@ -25,6 +25,9 @@
     <script>
         new Vue({
             el: '#app',
+            components: {
+                'sensor-data-component': window['SensorDataComponent'] // Bileşen adı ile eşleştirme yapılmalıdır
+            }
         });
     </script>
 </body>

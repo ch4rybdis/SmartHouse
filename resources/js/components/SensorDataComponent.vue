@@ -14,6 +14,7 @@
   import axios from 'axios';
 
   export default {
+    name: 'SensorDataComponent', // Bileşen ismi burada tanımlanmalıdır
     data() {
       return {
         readings: []
