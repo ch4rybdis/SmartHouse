@@ -1,11 +1,8 @@
 require('./bootstrap');
 
-import Vue from 'vue';
-import SensorData from './components/SensorData.vue';
+import { createApp } from 'vue';
+import SensorDataComponent from './components/SensorDataComponent.vue';
 
-const app = new Vue({
-    el: '#app',
-    components: {
-        SensorData
-    }
-});
+const app = createApp({});
+app.component('sensor-data-component', SensorDataComponent);
+app.mount('#app');
